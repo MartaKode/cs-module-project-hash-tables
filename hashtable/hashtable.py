@@ -75,7 +75,7 @@ class HashTable:
             hash = (hash * 33) + ord(c)
         return hash
 
-    def hash_index(self, key):
+    def hash_index(self, key): # hashing function
         """
         Take an arbitrary key and return a valid integer index
         between within the storage capacity of the hash table.
@@ -93,10 +93,9 @@ class HashTable:
         """
         # Your code here
         index = self.hash_index(key)
+        self.table[index] = value
 
         self.total += 1
-
-        self.table[index] = value
 
     def delete(self, key):
         """
@@ -125,7 +124,11 @@ class HashTable:
         # Your code here
         index = self.hash_index(key)
 
-        return self.table[index]
+        if not self.table[index]:
+            return 
+        else:
+            return self.table[index]
+
 
     def resize(self, new_capacity):
         """
@@ -135,10 +138,21 @@ class HashTable:
         Implement this.
         """
         # Your code here
-        self.capacity = new_capacity
-        self.table=self.table* self.capacity
+        old_table = self.table
+        old_capacity = self.capacity
+        self.table = [None] * new_capacity
 
-        
+        for i in range(old_capacity):
+            if old_table[i] != None:
+                self.put(f'{i}', old_table[i])
+                # new_index = self.hash_index(f'{i}')
+                # self.table[i] = old_table
+
+        # self.table = new_table
+        self.capacity = new_capacity
+
+        # recalculate index for everything
+        # store the old values somewhere else and then put them into new table
 
 
 if __name__ == "__main__":
@@ -175,3 +189,5 @@ if __name__ == "__main__":
         print(ht.get(f"line_{i}"))
 
     print("")
+
+    print(ht.table)
